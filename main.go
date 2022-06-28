@@ -2,8 +2,6 @@ package main
 
 import (
 	"context"
-	"crypto/md5"
-	"encoding/xml"
 	"fmt"
 	"io"
 	"log"
@@ -30,32 +28,37 @@ func main() {
 	// cut()
 
 	// 解压
+	fileprocessor := &FileProcessor{}
+	err := fileprocessor.UnPackTar("/Users/zheng/Documents/miuibak/wechat3_docker.tar", "/Users/zheng/Documents/miuibak/test/")
+	if err != nil {
+		log.Println(err)
+	}
 	// cmd := exec.Command("tar", "-zxvf", "/Users/zheng/Documents/miuibak/wechat3_docker.tar", "-C", "/Users/zheng/Documents/miuibak")
 	// cmd.Run()
 
 	// 获取uin
-	file, err := os.Open("/Users/zheng/Documents/miuibak/apps/com.tencent.mm/sp/app_brand_global_sp.xml")
-	if err != nil {
-		log.Printf("open file failed!%s", err)
-	}
-	uin := make([]byte, 2048)
-	n, _ := file.Read(uin)
-	log.Println(string(uin[:n]))
-	m := UINMap{}
-	err = xml.Unmarshal(uin[:n], &m)
-	if err != nil {
-		log.Println(err)
-	}
-	log.Println(m.Set.Str[0])
-	// 获取所有文件夹名称
-	for _, uin := range m.Set.Str {
-		f := []byte("mm" + uin)
-		fdName := md5.Sum(f)
-		log.Println(fmt.Sprintf("%x", fdName))
-		s := []byte("1234567890ABCDEF" + uin)
-		fdName = md5.Sum(s)
-		log.Println(fmt.Sprintf("%x", fdName)[:7])
-	}
+	// file, err := os.Open("/Users/zheng/Documents/miuibak/apps/com.tencent.mm/sp/app_brand_global_sp.xml")
+	// if err != nil {
+	// 	log.Printf("open file failed!%s", err)
+	// }
+	// uin := make([]byte, 2048)
+	// n, _ := file.Read(uin)
+	// log.Println(string(uin[:n]))
+	// m := UINMap{}
+	// err = xml.Unmarshal(uin[:n], &m)
+	// if err != nil {
+	// 	log.Println(err)
+	// }
+	// log.Println(m.Set.Str[0])
+	// // 获取所有文件夹名称
+	// for _, uin := range m.Set.Str {
+	// 	f := []byte("mm" + uin)
+	// 	fdName := md5.Sum(f)
+	// 	log.Println(fmt.Sprintf("%x", fdName))
+	// 	s := []byte("1234567890ABCDEF" + uin)
+	// 	fdName = md5.Sum(s)
+	// 	log.Println(fmt.Sprintf("%x", fdName)[:7])
+	// }
 
 	// 转移文件
 
