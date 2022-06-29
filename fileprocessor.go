@@ -47,7 +47,7 @@ type UINSet struct {
 type FileProcessor struct {
 }
 
-func (f FileProcessor) UnPackTar(src string, dst string) error {
+func UnPackTar(src string, dst string) error {
 
 	fr, err := os.Open(src)
 	if err != nil {

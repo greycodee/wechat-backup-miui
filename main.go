@@ -2,20 +2,42 @@ package main
 
 import (
 	"log"
+	"path/filepath"
 )
 
+var srcDir = "/mnt/d/miuiback"
+var dstDir = "/mnt/d/miuiback2"
+
 func main() {
+
+	dockerCli, err := OpenDockerCli()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// fmt.Println("hello")
 
 	// 去除MIUI头文件
-	// cut()
+	Cut(filepath.Join(srcDir, "wechat.bak"))
+
+	// 解包
+	dockerCli.RunWithDelete("greycodee/abe", []string{srcDir + ":/bak"},
+		[]string{"java", "-jar", "abe.jar", "unpack", "/bak/wechat_miui.bak", "/bak/unpackGo.tar"})
+
+	err = UnPackTar(filepath.Join(srcDir, "unpackGo.tar"), srcDir)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	infoList := GetWechatAccountInfo(srcDir)
+	ArchiveFile(srcDir, dstDir, infoList, dockerCli)
 
 	// 解压
-	fileprocessor := &FileProcessor{}
-	err := fileprocessor.UnPackTar("/Users/zheng/Documents/miuibak/wechat3_docker.tar", "/Users/zheng/Documents/miuibak/test/")
-	if err != nil {
-		log.Println(err)
-	}
+	// fileprocessor := &FileProcessor{}
+	// err := fileprocessor.UnPackTar("/Users/zheng/Documents/miuibak/wechat3_docker.tar", "/Users/zheng/Documents/miuibak/test/")
+	// if err != nil {
+	// 	log.Println(err)
+	// }
 	// cmd := exec.Command("tar", "-zxvf", "/Users/zheng/Documents/miuibak/wechat3_docker.tar", "-C", "/Users/zheng/Documents/miuibak")
 	// cmd.Run()
 
