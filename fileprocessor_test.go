@@ -32,3 +32,11 @@ func TestArchiveFile(t *testing.T) {
 	}
 	ArchiveFile("/Users/zheng/Documents/miuibak", "/Users/zheng/Documents/miuibak3", infoList, dockerCli)
 }
+
+func TestUnzip(t *testing.T) {
+	Unzip("/Users/zheng/Documents/miuibak/backup_wechat.zip", "/Users/zheng/Documents/miuibak")
+}
+
+func TestCutMiuiBak(t *testing.T) {
+	CutMiuiBak("/Users/zheng/Documents/miuibak/wechat.bak")
+}

@@ -154,12 +154,21 @@ func CopyFile(src string, dst string) error {
 	return nil
 }
 
-func Cut(src string) string {
+func CutMiuiBak(src string) string {
 	fin, err := os.Open(src)
 	if err != nil {
 		log.Fatalln(err)
 	}
 	defer fin.Close()
+
+	bakHead := make([]byte, 4)
+	_, err = fin.Read(bakHead)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	if string(bakHead) != "MIUI" {
+		log.Fatalln("不是小米的备份文件")
+	}
 
 	parentPath := string([]rune(src)[0:strings.LastIndex(src, "/")])
 	newFile := filepath.Join(parentPath, "wechat_miui.bak")
